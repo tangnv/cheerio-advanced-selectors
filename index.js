@@ -2,7 +2,7 @@
 
 var util = require('util')
 
-var splitter = /^(.*?)(?:\:(eq|(?:(?:first|last)(?!-child)))(?:\((\d+)\))?)(.*)/
+var splitter = /^(.*?)(?:\:(gt|lt|eq|(?:(?:first|last)(?!-child)))(?:\((\d+)\))?)(.*)/
 
 exports.wrap = function (Cheerio) {
   var CheerioAdv = function (selector, context, root, opts) {
@@ -86,5 +86,19 @@ var selectors = {
     return function (cursor) {
       return cursor.last()
     }
-  }
+  },
+
+  gt: function (index) {
+    index = parseInt(index, 10)
+    return function (cursor) {
+      return cursor.slice(index + 1)
+    }
+  },
+
+  lt: function (index) {
+    index = parseInt(index, 10)
+    return function (cursor) {
+      return cursor.slice(0, index - 1)
+    }
+  },
 }
